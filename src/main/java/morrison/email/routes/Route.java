@@ -11,6 +11,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
 /**
+ * Controller route for exposing a REST endpoint
  * @author Daniel Morrison
  * @since 26/05/2019.
  */

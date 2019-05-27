@@ -1,3 +1,6 @@
+group 'morrison'
+description 'Create a service for calling a couple of email service providers, with failover'
+
 buildscript {
     ext {
         springBootVersion = '2.1.4.RELEASE'

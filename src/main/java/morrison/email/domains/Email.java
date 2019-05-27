@@ -1,6 +1,8 @@
 package morrison.email.domains;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * App domain email object
@@ -13,11 +15,12 @@ public class Email {
     private List<String> to;
     private List<String> cc;
     private List<String> bcc;
+    private String from;
     private String subject;
     private String body;
 
     public List<String> getTo() {
-        return to;
+        return Optional.ofNullable(to).orElseGet(Collections::emptyList);
     }
 
     public Email setTo(List<String> to) {
@@ -26,7 +29,7 @@ public class Email {
     }
 
     public List<String> getCc() {
-        return cc;
+        return Optional.ofNullable(cc).orElseGet(Collections::emptyList);
     }
 
     public Email setCc(List<String> cc) {
@@ -35,11 +38,20 @@ public class Email {
     }
 
     public List<String> getBcc() {
-        return bcc;
+        return Optional.ofNullable(bcc).orElseGet(Collections::emptyList);
     }
 
     public Email setBcc(List<String> bcc) {
         this.bcc = bcc;
+        return this;
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public Email setFrom(String from) {
+        this.from = from;
         return this;
     }
 

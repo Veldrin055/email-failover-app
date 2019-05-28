@@ -13,6 +13,11 @@ public class ResponseMessage {
     private int status;
     private String message;
 
+    @SuppressWarnings("unused") // Actually used by Jackson validator
+    public ResponseMessage() {
+
+    }
+
     private ResponseMessage(int status, String message) {
         this.status = status;
         this.message = message;
@@ -30,7 +35,17 @@ public class ResponseMessage {
         return status;
     }
 
+    public ResponseMessage setStatus(int status) {
+        this.status = status;
+        return this;
+    }
+
     public String getMessage() {
         return message;
+    }
+
+    public ResponseMessage setMessage(String message) {
+        this.message = message;
+        return this;
     }
 }

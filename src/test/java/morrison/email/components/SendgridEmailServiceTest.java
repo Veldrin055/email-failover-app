@@ -22,12 +22,11 @@ import static org.mockito.Mockito.when;
  * @author Daniel Morrison
  * @since 28/05/2019.
  */
-public class MailgunEmailServiceTest {
+public class SendgridEmailServiceTest {
 
     @Test
-    public void shouldGetResponse() {
-        MailgunEmailService service = new MailgunEmailService(mockWebClient(Mono.just(Collections.singletonMap("ok", "yep")), Map.class), "domain", "key");
-
+    public void shouldReturnResult() {
+        SendgridEmailService service = new SendgridEmailService(mockWebClient(Mono.just(Collections.singletonMap("Ok", "yep")), Map.class), "key");
         Email email = new Email()
                 .setTo(Collections.singletonList("to"))
                 .setCc(Collections.singletonList("cc"))
@@ -42,7 +41,7 @@ public class MailgunEmailServiceTest {
 
     @Test
     public void shouldReturnFailure() {
-        MailgunEmailService service = new MailgunEmailService(mockWebClient(Mono.error(new WebClientResponseException(400, "boom", null, null, null)), Map.class), "domian", "key");
+        SendgridEmailService service = new SendgridEmailService(mockWebClient(Mono.error(new WebClientResponseException(400, "boom", null, null, null)), Map.class), "key");
         Email email = new Email()
                 .setTo(Collections.singletonList("to"))
                 .setCc(Collections.singletonList("cc"))
@@ -65,7 +64,7 @@ public class MailgunEmailServiceTest {
         when(mockWebClient.post()).thenReturn(uriSpec);
         when(uriSpec.uri(anyString())).thenReturn(bodySpec);
         when(bodySpec.header(anyString(), anyString())).thenReturn(bodySpec);
-        when(bodySpec.contentType(MediaType.MULTIPART_FORM_DATA)).thenReturn(bodySpec);
+        when(bodySpec.contentType(MediaType.APPLICATION_JSON)).thenReturn(bodySpec);
         when(bodySpec.body(any(BodyInserter.class))).thenReturn(headersSpec);
         when(headersSpec.accept(MediaType.APPLICATION_JSON)).thenReturn(bodySpec);
         when(bodySpec.retrieve()).thenReturn(responseSpec);

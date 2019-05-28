@@ -20,24 +20,24 @@ public class AppConfig {
 
     @Bean(name = "primary")
     EmailService primary(@Named("mailgun") WebClient webClient,
-                         @Value("mailgun.domain") String domain,
-                         @Value("mailgun.apiKey") String apiKey) {
+                         @Value("${mailgun.domain}") String domain,
+                         @Value("${mailgun.apiKey}") String apiKey) {
         return new MailgunEmailService(webClient, domain, apiKey);
     }
 
     @Bean(name = "secondary")
     EmailService secondary(@Named("sendgrid") WebClient webClient,
-                           @Value("sendgrid.apiKey") String apiKey) {
+                           @Value("${sendgrid.apiKey}") String apiKey) {
         return new SendgridEmailService(webClient, apiKey);
     }
 
     @Bean(name = "mailgun")
-    WebClient mailgunClient(@Value("mailgun.baseUrl") String baseUrl) {
+    WebClient mailgunClient(@Value("${mailgun.baseUrl}") String baseUrl) {
         return WebClient.create(baseUrl);
     }
 
     @Bean(name = "sendgrid")
-    WebClient sendGridClient(@Value("sendgrid.baseUrl") String baseUrl) {
+    WebClient sendGridClient(@Value("${sendgrid.baseUrl}") String baseUrl) {
         return WebClient.create(baseUrl);
     }
 

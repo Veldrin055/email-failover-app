@@ -65,5 +65,6 @@ This would allow for more than 2 email services.
 * More informative response information on what has happened, both good and bad
 * Generic HTTP REST email client. They both follow a similar pattern: Map request JSON to vendor request body, and dispatch.
 I could use generics to abstract this further.
-* Simple web page with a form for creating an email
-* Better input validation, with mor informative responses
+* Simple web page with a form for creating an email **EDIT** I created a simple one at `/index.html`, it doesn't show
+do much except post the form - no response apart from the console, or input validation
+* Better input validation, with more informative responses

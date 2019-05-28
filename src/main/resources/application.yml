@@ -1,8 +1,8 @@
 mailgun:
   baseUrl: https://api.mailgun.net/v3
-  apiKey: 24a64e06751cff4ed08ccb92a933cefe-39bc661a-2bbad551
-  domain: /sandbox0f047e084626491a825dba71628b6c87.mailgun.org
+  apiKey: <apikey>
+  domain: <domain>
 
 sendgrid:
   baseUrl: https://api.sendgrid.com
-  apiKey: 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
+  apiKey: <apikey>

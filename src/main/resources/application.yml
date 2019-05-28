@@ -1,8 +1,8 @@
 mailgun:
   baseUrl: https://api.mailgun.net/v3
-  apiKey: <apikey>
-  domain: <domain>
+  apiKey: ${mailgun.apiKey}
+  domain: ${mailgun.domain}
 
 sendgrid:
   baseUrl: https://api.sendgrid.com
-  apiKey: <apikey>
+  apiKey: ${sendgrid.apiKey}

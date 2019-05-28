@@ -53,7 +53,8 @@ public class SendEmailHandler {
                                 .ok()
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .body(ResponseMessage.ok("Message sent"), ResponseMessage.class)
-                )
+                ) // This is a bit of a hack to get the response on secondary working properly. Will need fixing before prod ready
+                .switchIfEmpty(ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(ResponseMessage.ok("Message sent"), ResponseMessage.class))
                 .onErrorResume(EmailAppException.class, e -> ServerResponse
                                 .status(e.getStatus())
                                 .body(ResponseMessage.fromError(e), ResponseMessage.class)

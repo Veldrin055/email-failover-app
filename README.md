@@ -10,6 +10,8 @@ it will return with a non 2xx code.
 ## Build and run
 You'll need Gradle 4.4+ installed.
 
+Put any API keys, domain strings into `/resources/application.yaml`
+
 To build: `gradle build`
 
 To run: `gradle bootRun`
@@ -57,6 +59,8 @@ A JSON object describing the result of the transaction.
 
 ## Configuration
 Config lives in `/resources/application.yaml`.
+
+You can edit this file to add any API keys, URLs or other configuration options. Please note a restart is required for any changes to take effect.
 
 ## Improvements that could be made
 * Better failover logic - at the moment it's just try primary, and if that fails try secondary. 

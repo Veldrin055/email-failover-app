@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>Send an email</title>
+</head>
+<body>
+<h1>Send an email</h1>
+<form id="form" onsubmit="return submit(this)">
+    <div class="form-group">
+        <label for="from">From email address</label>
+        <input type="email" class="form-control" id="from" placeholder="name@example.com">
+    </div>
+    <div class="form-group">
+        <label for="to">To email address (comma separated for multiple)</label>
+        <input type="email" class="form-control" id="to" placeholder="name@example.com. name@example.com">
+    </div>
+    <div class="form-group">
+        <label for="cc">CC email address (comma separated for multiple)</label>
+        <input type="email" class="form-control" id="cc" placeholder="name@example.com">
+    </div>
+    <div class="form-group">
+        <label for="bcc">From email address (comma separated for multiple)</label>
+        <input type="email" class="form-control" id="bcc" placeholder="name@example.com">
+    </div>
+    <div class="form-group">
+        <label for="subject">Subject line</label>
+        <input type="text" class="form-control" id="subject" placeholder="Hello">
+    </div>
+    <div class="form-group">
+        <label for="body">Body</label>
+        <textarea class="form-control" id="body" rows="3"></textarea>
+    </div>
+    <button type="submit">Submit</button>
+</form>
+
+<script lang="javascript">
+
+    const formToData = elements => [].reduce.call(elements, (data, element) => {
+        data[element.name] = element.value;
+        return data;
+    }, {});
+
+    const submit = e => {
+        console.log('sending');
+        e.preventDefault();
+        const data = formToData(e.elements);
+
+        const body = {
+            from: data.from,
+            to: data.to.split(','),
+            cc: data.cc.split(','),
+            bcc: data.cc.split(','),
+            subject: data.subject,
+            body: data.body,
+        };
+
+        fetch('/send', {
+            method: 'POST',
+            header: { 'Content-Type': 'application/json'},
+            body: JSON.stringify(body)
+        }).then(res => res.json())
+            .then(response => console.log('Success:', JSON.stringify(response)))
+            .catch(error => console.error('Error:', error));
+    }
+    
+</script>
+</body>
+</html>

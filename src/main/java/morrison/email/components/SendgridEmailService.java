@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
+ * Web client implementaiton for Sendgrid (sendgrid.com)
  * @author Daniel Morrison
  * @since 27/05/2019.
  */
@@ -28,9 +29,11 @@ public class SendgridEmailService implements EmailService {
     private static final Logger logger = LoggerFactory.getLogger(SendgridEmailService.class);
 
     private final WebClient webClient;
+    private final String apiKey;
 
-    public SendgridEmailService(@Named("sendgrid") WebClient webClient) {
+    public SendgridEmailService(@Named("sendgrid") WebClient webClient, String apiKey) {
         this.webClient = webClient;
+        this.apiKey = apiKey;
     }
 
     @Override
@@ -54,6 +57,7 @@ public class SendgridEmailService implements EmailService {
                 .flatMap(msg -> webClient
                         .post()
                         .uri("/v3/mail/send")
+                        .header("Authorization", "Bearer " + apiKey)
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(BodyInserters.fromObject(msg))
                         .accept(MediaType.APPLICATION_JSON)

@@ -11,6 +11,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import javax.inject.Named;
 
 /**
+ * Provide bindings for the email service integrations
  * @author Daniel Morrison
  * @since 27/05/2019.
  */
@@ -18,13 +19,16 @@ import javax.inject.Named;
 public class AppConfig {
 
     @Bean(name = "primary")
-    EmailService primary(@Named("mailgun") WebClient webClient, @Value("mailgun.domain") String domain) {
-        return new MailgunEmailService(webClient, domain);
+    EmailService primary(@Named("mailgun") WebClient webClient,
+                         @Value("mailgun.domain") String domain,
+                         @Value("mailgun.apiKey") String apiKey) {
+        return new MailgunEmailService(webClient, domain, apiKey);
     }
 
     @Bean(name = "secondary")
-    EmailService secondary(@Named("sendgrid") WebClient webClient) {
-        return new SendgridEmailService(webClient);
+    EmailService secondary(@Named("sendgrid") WebClient webClient,
+                           @Value("sendgrid.apiKey") String apiKey) {
+        return new SendgridEmailService(webClient, apiKey);
     }
 
     @Bean(name = "mailgun")

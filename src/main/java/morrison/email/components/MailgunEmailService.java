@@ -14,6 +14,7 @@ import reactor.core.publisher.Mono;
 import java.util.Map;
 
 /**
+ * Webclient implementation for Mailgun (mailgun.com)
  * @author Daniel Morrison
  * @since 27/05/2019.
  */
@@ -23,10 +24,12 @@ public class MailgunEmailService implements EmailService {
 
     private final WebClient webClient;
     private final String domain;
+    private final String apiKey;
 
-    public MailgunEmailService(WebClient webClient, String domain) {
+    public MailgunEmailService(WebClient webClient, String domain, String apiKey) {
         this.webClient = webClient;
         this.domain = domain;
+        this.apiKey = apiKey;
     }
 
     @Override
@@ -45,6 +48,8 @@ public class MailgunEmailService implements EmailService {
                 .flatMap(msg -> webClient
                         .post()
                         .uri(domain + "/messages")
+                        header("Authorization", "Basic " + Base64Utils
+                                .encodeToString(("api:" + apiKey).getBytes(UTF_8)))
                         .contentType(MediaType.MULTIPART_FORM_DATA)
                         .body(BodyInserters.fromMultipartData(msg))
                         .accept(MediaType.APPLICATION_JSON)

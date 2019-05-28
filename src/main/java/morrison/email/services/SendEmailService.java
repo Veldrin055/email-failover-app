@@ -20,6 +20,8 @@ import javax.inject.Named;
 @Service
 public class SendEmailService {
 
+    private static final Logger logger = LoggerFactory.getLogger(SendEmailService.class);
+
     private final EmailService primary;
     private final EmailService secondary;
 
@@ -32,7 +34,13 @@ public class SendEmailService {
     public Mono<Boolean> sendEmail(Email email) {
         return Mono.just(email)
                 .flatMap(e -> primary.sendEmail(email))
-                .onErrorResume(EmailServiceException.class, e -> Mono.just(email).flatMap(secondary::sendEmail))
-                .onErrorMap(t -> new EmailAppException(HttpStatus.SERVICE_UNAVAILABLE, "Both attempts failed"));
+                .onErrorResume(EmailServiceException.class, e -> {
+                    logger.error("Primary service failed", e);
+                    return Mono.just(email).flatMap(secondary::sendEmail)
+                })
+                .onErrorMap(t -> {
+                    logger.error("Secondary service failed", t);
+                    return new EmailAppException(HttpStatus.SERVICE_UNAVAILABLE, "Both attempts failed")
+                });
     }
 }

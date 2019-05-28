@@ -4,6 +4,7 @@ import morrison.email.domains.Email;
 import reactor.core.publisher.Mono;
 
 /**
+ * Abstraction for an email service provider.
  * @author Daniel Morrison
  * @since 26/05/2019.
  */

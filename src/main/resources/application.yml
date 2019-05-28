@@ -1,0 +1,6 @@
+mailgun:
+  apiKey: 24a64e06751cff4ed08ccb92a933cefe-39bc661a-2bbad551
+  domain: sandbox0f047e084626491a825dba71628b6c87.mailgun.org
+
+sendgrid:
+  apiKey: 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

@@ -3,6 +3,7 @@ package morrison.email.exceptions;
 import org.springframework.http.HttpStatus;
 
 /**
+ * Business exception wrapper for when our application fails
  * @author Daniel Morrison
  * @since 26/05/2019.
  */

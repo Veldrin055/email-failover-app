@@ -3,6 +3,7 @@ package morrison.email.domains;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -16,17 +17,16 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Email {
 
-    @javax.validation.constraints.Email
-    private List<String> cc;
-    @javax.validation.constraints.Email
-    private List<String> to;
-    @javax.validation.constraints.Email
-    private List<String> bcc;
-    @javax.validation.constraints.Email
+    private List<@javax.validation.constraints.Email(message = "'cc' must be a valid email address") String> cc;
+    @NotEmpty(message = "'to' field must not be empty")
+    private List<@javax.validation.constraints.Email(message = "'to' must be a valid email address") String> to;
+    private List<@javax.validation.constraints.Email(message = "'bcc' must be a valid email address") String> bcc;
+    @javax.validation.constraints.Email(message = "'from' must be a valid email address")
+    @NotBlank(message = "'from' must not be blank")
     private String from;
-    @NotBlank
+    @NotBlank(message = "'subject' must not be blank")
     private String subject;
-    @NotBlank
+    @NotBlank(message = "'body' must not be blank")
     private String body;
 
     public List<String> getTo() {

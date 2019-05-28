@@ -49,13 +49,7 @@ public class IntegrationTest {
 
     @Test
     public void shouldGetResponse() {
-        Email email = new Email()
-                .setTo(Collections.singletonList("to"))
-                .setCc(Collections.singletonList("cc"))
-                .setBcc(Collections.singletonList("bcc"))
-                .setFrom("from")
-                .setSubject("subject")
-                .setBody("body");
+        Email email = TestUtils.buildEmail();
 
         mailgun(Mono.just(Collections.singletonMap("result", "ok")), Map.class);
 
@@ -67,6 +61,42 @@ public class IntegrationTest {
         final ResponseMessage body = response.getBody();
         assertThat(body, is(notNullValue()));
         assertThat(body.getMessage(), is(equalTo("Message sent")));
+    }
+
+    @Test
+    public void shouldGetResponseWhenPrimaryFails() {
+        Email email = TestUtils.buildEmail();
+
+        mailgun(Mono.error(new IllegalAccessException("boom")), Map.class);
+        sendgrid(Mono.just(Collections.singletonMap("result", "ok")), Map.class);
+
+
+        final ResponseEntity<ResponseMessage> response =
+                restTemplate.postForEntity("http://localhost:" + port + "/send", email, ResponseMessage.class);
+
+        assertThat(response, is(notNullValue()));
+        assertThat(response.getStatusCode(), is(equalTo(HttpStatus.OK)));
+        final ResponseMessage body = response.getBody();
+        assertThat(body, is(notNullValue()));
+        assertThat(body.getMessage(), is(equalTo("Message sent")));
+    }
+
+    @Test
+    public void shouldGetResponseWhenBothFail() {
+        Email email = TestUtils.buildEmail();
+
+        mailgun(Mono.error(new IllegalAccessException("boom")), Map.class);
+        sendgrid(Mono.error(new IllegalAccessException("boom")), Map.class);
+
+
+        final ResponseEntity<ResponseMessage> response =
+                restTemplate.postForEntity("http://localhost:" + port + "/send", email, ResponseMessage.class);
+
+        assertThat(response, is(notNullValue()));
+        assertThat(response.getStatusCode(), is(equalTo(HttpStatus.SERVICE_UNAVAILABLE)));
+        final ResponseMessage body = response.getBody();
+        assertThat(body, is(notNullValue()));
+        assertThat(body.getMessage(), is(equalTo("Both attempts failed")));
     }
 
     @SuppressWarnings("unchecked")

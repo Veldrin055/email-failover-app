@@ -1,5 +1,6 @@
 package morrison.email.handlers;
 
+import morrison.email.TestUtils;
 import morrison.email.domains.Email;
 import morrison.email.exceptions.EmailAppException;
 import morrison.email.services.SendEmailService;
@@ -18,6 +19,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -39,7 +41,7 @@ public class SendEmailHandlerTest {
 
     @Test
     public void shouldHandleSuccess() {
-        Email email = new Email();
+        Email email = TestUtils.buildEmail();
         given(serverRequest.bodyToMono(Email.class)).willReturn(Mono.just(email));
         given(emailService.sendEmail(email)).willReturn(Mono.just(true));
 
@@ -50,8 +52,19 @@ public class SendEmailHandlerTest {
     }
 
     @Test
-    public void shouldHandleError() {
+    public void shouldHandleValidationFailure() {
         Email email = new Email();
+        given(serverRequest.bodyToMono(Email.class)).willReturn(Mono.just(email));
+
+        StepVerifier.create(handler.send(serverRequest))
+                .assertNext(response -> assertThat(response.statusCode(), is(equalTo(HttpStatus.NOT_ACCEPTABLE))))
+                .verifyComplete();
+        verify(emailService, never()).sendEmail(email);
+    }
+
+    @Test
+    public void shouldHandleError() {
+        Email email = TestUtils.buildEmail();
         given(serverRequest.bodyToMono(Email.class)).willReturn(Mono.just(email));
         given(emailService.sendEmail(any(Email.class))).willReturn(Mono.error(new EmailAppException(HttpStatus.BAD_REQUEST, "boom")));
 

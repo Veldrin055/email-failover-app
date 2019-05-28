@@ -33,6 +33,7 @@ repositories {
 dependencies {
     compile('org.springframework.boot:spring-boot-starter-webflux')
     compile('javax.inject:javax.inject:1')
+    compile('org.glassfish:javax.el:3.0.1-b08')
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('io.projectreactor:reactor-test')
 }

@@ -51,7 +51,8 @@ A JSON object describing the result of the transaction.
 
 #### Response codes
 * `200 OK` The email was sent by a Email Service Provider successfully.
-* `400 CLIENT ERROR` The input was not valid, check the message in the response object for why
+* `400 CLIENT ERROR` The request was not valid, check the message in the response object for why
+* `406 NOT ACCEPTABLE` A field(s) in the request body does not pass validation, check the message in the response for a hint
 * `500 SERVER ERROR` Something went wrong in the app, and the email could not be sent
 
 ## Configuration

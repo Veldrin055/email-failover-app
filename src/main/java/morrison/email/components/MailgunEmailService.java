@@ -5,12 +5,14 @@ import morrison.email.exceptions.EmailServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
+import org.springframework.util.Base64Utils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.nio.charset.Charset;
 import java.util.Map;
 
 /**
@@ -48,8 +50,9 @@ public class MailgunEmailService implements EmailService {
                 .flatMap(msg -> webClient
                         .post()
                         .uri(domain + "/messages")
-                        header("Authorization", "Basic " + Base64Utils
-                                .encodeToString(("api:" + apiKey).getBytes(UTF_8)))
+                        .header("Authorization", "Basic " + Base64Utils
+                                        .encodeToString(("api:" + apiKey).getBytes(Charset.forName("UTF-8")))
+                        )
                         .contentType(MediaType.MULTIPART_FORM_DATA)
                         .body(BodyInserters.fromMultipartData(msg))
                         .accept(MediaType.APPLICATION_JSON)

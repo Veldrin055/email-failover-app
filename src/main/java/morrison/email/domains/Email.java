@@ -1,5 +1,8 @@
 package morrison.email.domains;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import javax.validation.constraints.NotBlank;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -10,13 +13,20 @@ import java.util.Optional;
  * @author Daniel Morrison
  * @since 26/05/2019.
  */
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Email {
 
-    private List<String> to;
+    @javax.validation.constraints.Email
     private List<String> cc;
+    @javax.validation.constraints.Email
+    private List<String> to;
+    @javax.validation.constraints.Email
     private List<String> bcc;
+    @javax.validation.constraints.Email
     private String from;
+    @NotBlank
     private String subject;
+    @NotBlank
     private String body;
 
     public List<String> getTo() {

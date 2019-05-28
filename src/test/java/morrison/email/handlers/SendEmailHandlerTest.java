@@ -16,6 +16,7 @@ import reactor.test.StepVerifier;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -52,7 +53,7 @@ public class SendEmailHandlerTest {
     public void shouldHandleError() {
         Email email = new Email();
         given(serverRequest.bodyToMono(Email.class)).willReturn(Mono.just(email));
-        given(emailService.sendEmail(email)).willReturn(Mono.error(new EmailAppException(HttpStatus.BAD_REQUEST, "boom")));
+        given(emailService.sendEmail(any(Email.class))).willReturn(Mono.error(new EmailAppException(HttpStatus.BAD_REQUEST, "boom")));
 
         StepVerifier.create(handler.send(serverRequest))
                 .assertNext(response -> assertThat(response.statusCode(), is(equalTo(HttpStatus.BAD_REQUEST))))

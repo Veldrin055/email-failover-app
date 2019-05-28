@@ -4,6 +4,8 @@ import morrison.email.components.EmailService;
 import morrison.email.domains.Email;
 import morrison.email.exceptions.EmailAppException;
 import morrison.email.exceptions.EmailServiceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -36,11 +38,11 @@ public class SendEmailService {
                 .flatMap(e -> primary.sendEmail(email))
                 .onErrorResume(EmailServiceException.class, e -> {
                     logger.error("Primary service failed", e);
-                    return Mono.just(email).flatMap(secondary::sendEmail)
+                    return Mono.just(email).flatMap(secondary::sendEmail);
                 })
                 .onErrorMap(t -> {
                     logger.error("Secondary service failed", t);
-                    return new EmailAppException(HttpStatus.SERVICE_UNAVAILABLE, "Both attempts failed")
+                    return new EmailAppException(HttpStatus.SERVICE_UNAVAILABLE, "Both attempts failed");
                 });
     }
 }

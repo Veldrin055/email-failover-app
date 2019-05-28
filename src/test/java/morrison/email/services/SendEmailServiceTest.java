@@ -2,6 +2,7 @@ package morrison.email.services;
 
 import morrison.email.components.EmailService;
 import morrison.email.domains.Email;
+import morrison.email.exceptions.EmailAppException;
 import morrison.email.exceptions.EmailServiceException;
 import org.junit.Before;
 import org.junit.Test;
@@ -64,12 +65,7 @@ public class SendEmailServiceTest {
     @Test
     public void shouldErrorWhenBothServicesFail() {
         Email email = new Email();
-        given(primary.sendEmail(email)).willReturn(Mono.error(new EmailServiceException("boom")));
-        given(secondary.sendEmail(email)).willReturn(Mono.error(new EmailServiceException("boom again")));
         StepVerifier.create(service.sendEmail(email))
-                .assertNext(bool -> assertThat(bool, is(equalTo(false))))
-                .verifyComplete();
-        verify(primary).sendEmail(email);
-        verify(secondary).sendEmail(email);
+                .expectError(EmailAppException.class);
     }
 }
